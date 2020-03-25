@@ -1,0 +1,100 @@
+{
+  "dataSources": [
+    {
+      "id": 0,
+      "type": "KAFKA_UNIVERSAL",
+      "name": "Kafka_1",
+      "desc": "Sample Source for Kafka version over 0.11",
+      "address": "localhost:2181",
+      "brokers": "localhost:9092"
+    },
+    {
+      "id": 1,
+      "type": "MYSQL",
+      "name": "Mysql_1",
+      "desc": "Sample Source for Mysql",
+      "jdbcUrl": "jdbc:mysql://localhost:3306/flink",
+      "username": "root",
+      "password": "abc123"
+    }
+  ],
+  "sourceTables": [
+    {
+          "id": 0,
+          "sourceId": 0,
+          "topic": "console",
+          "tableName": "kafka_flink_table",
+          "schema": [
+            {
+              "name": "sk",
+              "type": "STRING"
+            },
+            {
+              "name": "sv",
+              "type": "STRING"
+            }
+          ],
+          "offset": "latest",
+          "timeType": "ProcTime",
+          "parallel": 1,
+          "params": [
+            {
+          "key": "Tag",
+          "value": "Kafka Source Table Tag"
+        }
+      ]
+    }
+  ],
+  "dimTables": [
+    {
+      "id": 0,
+      "sourceId": 1,
+      "tableType": "result",
+      "table": "flink_dim_table",
+      "mapper": "flink_dim_table",
+      "schema": [
+        {
+          "name": "dk",
+          "type": "VARCHAR"
+        },
+        {
+          "name": "dc",
+          "type": "VARCHAR"
+        }
+      ],
+      "pk": "dk",
+      "parallel": 1,
+      "cacheStrategy": "None",
+      "cacheLines": 10,
+      "cacheTime": 10,
+      "partitionEnabled": false,
+      "errorTolerance": 3
+    }
+  ],
+  "sinkTables": [
+    {
+      "id": 0,
+      "sourceId": 1,
+      "table": "flink_kafka_table",
+      "mapper": "flink_kafka_table",
+      "schema": [
+        {
+          "name": "kk",
+          "type": "VARCHAR"
+        },
+        {
+          "name": "kv",
+          "type": "VARCHAR"
+        },
+        {
+          "name": "kc",
+          "type": "VARCHAR"
+        }
+      ],
+      "updateMode": "update",
+      "parallel": 1,
+      "outInterval": 0,
+      "outCount": 0
+    }
+  ]
+}
